@@ -4,17 +4,19 @@
 # Licensed under the MIT license. See LICENSE file in the project root for
 # full license information.
 import time
+
 from rest_wrappers.generated.e2erestapi.azure_iot_end_to_end_test_wrapper_rest_api import (
     AzureIOTEndToEndTestWrapperRestApi,
 )
 from multiprocessing.pool import ThreadPool
-from ..decorators import log_entry_and_exit, add_timeout
+from adapters.decorators import log_entry_and_exit, add_timeout
+from adapters.abstract_device_api import AbstractDeviceApi
 
 # Amount of time to wait after submitting async request.  Gives server time to call API before calling the next API.
 wait_time_for_async_start = 1
 
 
-class DeviceApi:
+class DeviceApi(AbstractDeviceApi):
     def __init__(self, hostname):
         self.rest_endpoint = AzureIOTEndToEndTestWrapperRestApi(hostname).device
         self.rest_endpoint.config.retry_policy.retries = 0
@@ -34,12 +36,30 @@ class DeviceApi:
         )
         self.connection_id = result.connection_id
 
+    def connect_async(self, transport, connection_string, ca_certificate):
+        pass
+
+    def send_event(self, body):
+        raise NotImplementedError
+
+    def send_event_async(self, body):
+        raise NotImplementedError
+
+    def enable_c2d(self):
+        raise NotImplementedError
+
+    def receive_c2d_async(self, body):
+        raise NotImplementedError
+
     @log_entry_and_exit
     @add_timeout
     def disconnect(self):
         if self.connection_id:
             self.rest_endpoint.disconnect(self.connection_id)
             self.connection_id = ""
+
+    def disconnect_async(self):
+        raise NotImplementedError
 
     @log_entry_and_exit
     @add_timeout
