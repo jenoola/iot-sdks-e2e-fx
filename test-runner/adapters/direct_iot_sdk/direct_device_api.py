@@ -13,16 +13,16 @@ object_list = []
 class DeviceApi(AbstractDeviceApi):
     def __init__(self):
         self.auth_provider = None
-        self.client = None
+        self.sync_client = None
 
     def connect(self, transport, connection_string, ca_certificate):
         print("connecting using " + transport)
         self.auth_provider = from_connection_string(connection_string)
         if ca_certificate and "cert" in ca_certificate:
             self.auth_provider.ca_cert = ca_certificate["cert"]
-        self.client = DeviceClientSync.from_authentication_provider(self.auth_provider, transport)
+        self.sync_client = DeviceClientSync.from_authentication_provider(self.auth_provider, transport)
         object_list.append(self)
-        self.client.connect()
+        self.sync_client.connect()
 
     def connect_async(self, transport, connection_string, ca_certificate):
         raise NotImplementedError
@@ -31,8 +31,8 @@ class DeviceApi(AbstractDeviceApi):
         if self in object_list:
             object_list.remove(self)
 
-        self.client.disconnect()
-        self.client = None
+        self.sync_client.disconnect()
+        self.sync_client = None
 
         self.auth_provider.disconnect()
         self.auth_provider = None

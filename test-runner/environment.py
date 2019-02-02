@@ -240,6 +240,7 @@ def setupExecutionEnvironment():
         adapters.add_direct_iot_sdk_adapter(
             name="TestModuleClient", api_surface="ModuleApi"
         )
+        adapters.add_direct_iot_sdk_adapter(name="LeafDeviceClient", api_surface="DeviceApi")
     else:
         adapters.add_rest_adapter(
             name="TestModuleClient", api_surface="ModuleApi", uri=test_module_uri
