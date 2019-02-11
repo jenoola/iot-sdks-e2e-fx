@@ -245,11 +245,11 @@ def setupExecutionEnvironment():
         adapters.add_rest_adapter(
             name="TestModuleClient", api_surface="ModuleApi", uri=test_module_uri
         )
+        adapters.add_rest_adapter(
+            name="LeafDeviceClient", api_surface="DeviceApi", uri=leaf_device_uri
+        )
     adapters.add_rest_adapter(
         name="FriendModuleClient", api_surface="ModuleApi", uri=friend_module_uri
-    )
-    adapters.add_rest_adapter(
-        name="LeafDeviceClient", api_surface="DeviceApi", uri=leaf_device_uri
     )
     adapters.add_rest_adapter(
         name="RegistryClient", api_surface="RegistryApi", uri=registry_uri

@@ -5,6 +5,7 @@
 # full license information.
 
 from .direct_module_api import ModuleApi, object_list
+from .direct_device_api import DeviceApi, object_list
 
 
 def cleanup_test_objects():

@@ -4,7 +4,7 @@
 # --------------------------------------------------------------------------------------------
 
 from adapters.abstract_device_api import AbstractDeviceApi
-from azure.iot.hub.devicesdk import DeviceClientSync
+from azure.iot.hub.devicesdk.sync_clients import DeviceClient as DeviceClientSync
 from azure.iot.hub.devicesdk.auth.authentication_provider_factory import from_connection_string
 
 object_list = []
