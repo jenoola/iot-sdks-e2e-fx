@@ -33,11 +33,21 @@ steps:
 
 - script: |
     docker login -u ${{ parameters.repo_user }} -p ${{ parameters.repo_password }} ${{ parameters.repo_address }} &&
-    docker pull ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v2:${{ parameters.test_image }} &&
     docker pull ${{ parameters.image_edgeAgent }} &&
-    docker pull ${{ parameters.image_edgeHub }} &&
+    docker pull ${{ parameters.image_edgeHub }} 
+  displayName: 'pre-cache iotedge docker images'
+  condition: and(
+        succeeded(), 
+        ne(variables['skipTest'],'yes'), 
+        eq(variables['needIotEdge'], 'yes')
+      )
+
+
+- script: |
+    docker login -u ${{ parameters.repo_user }} -p ${{ parameters.repo_password }} ${{ parameters.repo_address }} &&
+    docker pull ${{ parameters.repo_address }}/${{ parameters.language }}-e2e-v2:${{ parameters.test_image }} &&
     docker pull ${{ parameters.image_friendmod }} 
-  displayName: 'pre-cache docker images'
+  displayName: 'pre-cache test docker images'
   condition: and(succeeded(), ne(variables['skipTest'],'yes'))
 
 - script: |
@@ -65,12 +75,20 @@ steps:
 - script: |
     $(Horton.FrameworkRoot)/scripts/verify-deployment.sh edgeHub ${{ parameters.image_edgeHub }}
   displayName: 'Verify edgeHub deployment'
-  condition: and(succeeded(), ne(variables['skipTest'],'yes'))
+  condition: and(
+        succeeded(), 
+        ne(variables['skipTest'],'yes'), 
+        eq(variables['needIotEdge'], 'yes')
+      )
 
 - script: |
     $(Horton.FrameworkRoot)/scripts/verify-deployment.sh edgeAgent ${{ parameters.image_edgeAgent }}
   displayName: 'Verify edgeAgent deployment'
-  condition: and(succeeded(), ne(variables['skipTest'],'yes'))
+  condition: and(
+        succeeded(), 
+        ne(variables['skipTest'],'yes'), 
+        eq(variables['needIotEdge'], 'yes')
+      )
 
 - script: |
     $(Horton.FrameworkRoot)/scripts/verify-deployment.sh friendMod ${{ parameters.image_friendMod }}
