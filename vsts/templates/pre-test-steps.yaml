@@ -25,7 +25,7 @@ steps:
 - script: |
     $(Horton.FrameworkRoot)/scripts/setup-iotedge.sh
   displayName: 'install iotedge packages'
-  condition: and(succeeded(), ne(variables['skipTest'],'yes'), eq("${{ parameters.need_io_edge }}", "yes"))
+  condition: and(succeeded(), ne(variables['skipTest'],'yes'), eq('${{ parameters.need_io_edge }}', 'yes'))
 
 - script: |
     docker login -u ${{ parameters.repo_user }} -p ${{ parameters.repo_password }} ${{ parameters.repo_address }} &&
