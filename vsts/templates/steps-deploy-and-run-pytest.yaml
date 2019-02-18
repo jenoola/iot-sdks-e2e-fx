@@ -148,7 +148,6 @@ steps:
   parameters:
     language: ${{ parameters.language }}
     test_image: $(testImage)
-    need_iot_edge: $(needIotEdge)
 
 - template: pytest-test-steps.yaml
   parameters:
@@ -158,7 +157,6 @@ steps:
     junit_suite_name: $(junitSuiteName)
     log_folder_name: $(logFolderName)
     extra_args: $(testArgs)
-    need_iot_edge: $(needIotEdge)
 
 - template: post-test-steps.yaml
   parameters:
