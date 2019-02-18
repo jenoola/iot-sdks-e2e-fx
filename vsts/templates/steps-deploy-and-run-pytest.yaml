@@ -107,7 +107,7 @@ steps:
 
     # do we need iotedge or can get by with docker containers?
     $NeedIotEdge="yes"
-    if {($TestSet) -eq "iothub_module") {
+    if ($TestSet -eq "iothub_module") {
       $NeedIotEdge="no"
     }
 
