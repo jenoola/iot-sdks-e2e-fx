@@ -8,7 +8,6 @@ import github
 class DockerTags:
     def __init__(self):
         self.repo = None
-        self.base_branch = "master"
         self.commit_name = None
         self.commit_sha = None
         self.langauge = None
@@ -63,6 +62,8 @@ def running_on_azure_pipelines():
 def get_commit_name(commit):
     if commit.startswith("refs/heads/"):
         return commit.split("/")[2]
+    elif commit.startswith("refs/tags/"):
+        return commit.split("/")[2]
     elif commit.startswith("refs/pull/"):
         return "PR" + commit.split("/")[2]
     else:
@@ -87,7 +88,7 @@ def get_docker_tags_from_commit(language, repo, commit):
             "{}-{}-{}".format(
                 image_tag_prefix(),
                 sanitize_string(tags.repo),
-                sanitize_string(tags.base_branch),
+                sanitize_string(tags.commit_name),
             ),
         )
         tags.image_tags.insert(
@@ -95,8 +96,8 @@ def get_docker_tags_from_commit(language, repo, commit):
             "{}-{}-{}-{}".format(
                 image_tag_prefix(),
                 sanitize_string(tags.repo),
-                sanitize_string(tags.base_branch),
                 sanitize_string(tags.commit_name),
+                shorten_sha(tags.commit_sha),
             ),
         )
     else:
